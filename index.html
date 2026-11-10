@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#133d49">
+  <meta name="description" content="Explore sampling distributions and the Central Limit Theorem through an interactive simulation.">
+  <title>The Sampling Lab | Sampling Distributions & the CLT</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" type="module"></script>
+</head>
+<body>
+  <a class="skip-link" href="#controls">Skip to simulation controls</a>
+  <header class="masthead">
+    <div class="page-width masthead-inner">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">∑</span><span>The Sampling Lab</span></div>
+      <span class="header-note">Interactive statistics lab</span>
+    </div>
+  </header>
+
+  <main class="page-width">
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-copy">
+        <p class="eyebrow">SAMPLING DISTRIBUTIONS · CENTRAL LIMIT THEOREM</p>
+        <h1 id="page-title">How can averages be more predictable than individuals?</h1>
+        <p class="intro">A coffee shop's wait times are highly variable. Investigate what happens when we take the average wait time of a random sample of customers.</p>
+      </div>
+      <div class="concept-badge" aria-label="Explore, predict, explain">
+        <span class="concept-icon" aria-hidden="true">↝</span>
+        <div><strong>Explore first.</strong><span>Explain what you notice.</span></div>
+      </div>
+    </section>
+
+    <section class="prompt-card" aria-labelledby="prediction-title">
+      <div class="prompt-icon" aria-hidden="true">?</div>
+      <div>
+        <h2 id="prediction-title">Before you begin</h2>
+        <p>Which is likely to vary more from sample to sample: <strong>one customer's wait time</strong> or <strong>the average wait time of 36 customers</strong>? Make a prediction, then test it.</p>
+      </div>
+    </section>
+
+    <section class="lab-grid" aria-label="Population and simulation">
+      <article class="panel population-panel" aria-labelledby="population-title">
+        <div class="panel-top"><span class="step-tag">01 · THE POPULATION</span></div>
+        <h2 id="population-title">Individual wait times</h2>
+        <p class="panel-description">The distribution of wait times for individual customers is strongly right-skewed.</p>
+        <div id="population-plot" class="plot" role="img" aria-label="Right-skewed distribution of individual wait times. Most wait times are short and a few are very long. Mean is 8 minutes."></div>
+        <div class="population-facts" aria-label="Population information">
+          <div><span class="fact-label">Population mean, μ</span><strong>8 minutes</strong></div>
+          <div><span class="fact-label">Population SD, σ</span><strong>8 minutes</strong></div>
+        </div>
+        <p class="fine-print">Model: independent wait times from an exponential distribution. This is a teaching model, not real café data.</p>
+      </article>
+
+      <article class="panel simulator-panel" id="controls" aria-labelledby="simulator-title">
+        <div class="panel-top"><span class="step-tag">02 · YOUR EXPERIMENT</span><span class="live-pill"><span aria-hidden="true" class="live-dot"></span> Ready to sample</span></div>
+        <h2 id="simulator-title">Make a sampling distribution</h2>
+        <p class="panel-description">Choose a sample size. Each time you generate a sample, we compute its mean and add that mean to the histogram.</p>
+        <fieldset class="sample-choice">
+          <legend>Customers per sample <span class="legend-symbol">n</span></legend>
+          <div class="segmented" role="group" aria-label="Choose sample size">
+            <button class="sample-size active" type="button" data-n="1" aria-pressed="true">n = 1</button>
+            <button class="sample-size" type="button" data-n="4" aria-pressed="false">n = 4</button>
+            <button class="sample-size" type="button" data-n="36" aria-pressed="false">n = 36</button>
+          </div>
+        </fieldset>
+        <div class="generate-controls">
+          <span class="control-label">Generate random samples</span>
+          <div class="button-row">
+            <button type="button" class="action-button primary" data-generate="1">+ 1 sample</button>
+            <button type="button" class="action-button secondary" data-generate="100">+ 100</button>
+            <button type="button" class="action-button secondary" data-generate="1000">+ 1,000</button>
+          </div>
+        </div>
+        <div class="plot-shell">
+          <div class="plot-heading"><h3 id="sampling-title">Distribution of sample means</h3><span id="active-count" class="count">0 sample means</span></div>
+          <div id="sampling-plot" class="plot" role="img" aria-label="No samples generated yet"></div>
+          <p id="plot-note" class="plot-note">Choose a button above to start your sampling distribution.</p>
+        </div>
+        <div class="last-sample" aria-live="polite" aria-atomic="true">
+          <span class="control-label">Most recent sample</span>
+          <p id="last-sample-text">You haven't drawn a sample yet.</p>
+        </div>
+        <div class="metric-grid">
+          <div class="metric"><span class="fact-label">Mean of sample means</span><strong id="observed-mean">—</strong></div>
+          <div class="metric"><span class="fact-label">SD of sample means</span><strong id="observed-sd">—</strong></div>
+        </div>
+        <button type="button" id="reset-active" class="text-button">↺ Clear samples for n = 1</button>
+        <p id="sample-status" class="visually-hidden" aria-live="polite"></p>
+      </article>
+    </section>
+
+    <section class="panel comparison-panel" aria-labelledby="compare-title">
+      <div class="section-heading"><div><span class="step-tag">03 · FIND THE PATTERN</span><h2 id="compare-title">Compare your experiments</h2><p class="panel-description">Every plot uses the same horizontal and vertical scales, so the shape and spread can be compared fairly.</p></div><button type="button" id="reset-all" class="text-button">↺ Start over</button></div>
+      <div class="comparison-grid">
+        <article class="comparison-item" aria-labelledby="compare-1-title">
+          <div class="compare-top"><h3 id="compare-1-title">n = 1</h3><span id="compare-count-1">No samples yet</span></div>
+          <div id="compare-plot-1" class="mini-plot" role="img" aria-label="No samples for sample size 1"></div>
+          <div class="comparison-stats"><span>Mean: <strong id="compare-mean-1">—</strong></span><span>SD: <strong id="compare-sd-1">—</strong></span></div>
+        </article>
+        <article class="comparison-item" aria-labelledby="compare-4-title">
+          <div class="compare-top"><h3 id="compare-4-title">n = 4</h3><span id="compare-count-4">No samples yet</span></div>
+          <div id="compare-plot-4" class="mini-plot" role="img" aria-label="No samples for sample size 4"></div>
+          <div class="comparison-stats"><span>Mean: <strong id="compare-mean-4">—</strong></span><span>SD: <strong id="compare-sd-4">—</strong></span></div>
+        </article>
+        <article class="comparison-item" aria-labelledby="compare-36-title">
+          <div class="compare-top"><h3 id="compare-36-title">n = 36</h3><span id="compare-count-36">No samples yet</span></div>
+          <div id="compare-plot-36" class="mini-plot" role="img" aria-label="No samples for sample size 36"></div>
+          <div class="comparison-stats"><span>Mean: <strong id="compare-mean-36">—</strong></span><span>SD: <strong id="compare-sd-36">—</strong></span></div>
+        </article>
+      </div>
+      <div class="notice"><strong>Notice &amp; wonder:</strong> When you increase the sample size, what stays about the same? What changes about the shape and spread?</div>
+    </section>
+
+    <section class="discovery-panel" aria-labelledby="reveal-title">
+      <div class="discovery-top"><div><span class="step-tag light-tag">04 · CONNECT THE IDEAS</span><h2 id="reveal-title">What does the mathematics predict?</h2><p>First use your experiments to make a claim about the center and spread. Then reveal the theory.</p></div><button type="button" id="reveal-button" class="reveal-button" aria-expanded="false" aria-controls="math-reveal">Reveal the mathematics ↓</button></div>
+      <div id="math-reveal" hidden>
+        <div class="math-grid">
+          <div class="math-tile"><span>Center of sample means</span><div class="formula">E(X̄) = μ = 8</div><p>Averages are centered at the population mean.</p></div>
+          <div class="math-tile"><span>Standard deviation of sample means</span><div class="formula">SD(X̄) = σ / √n</div><p>For this population: 8 / √n minutes.</p></div>
+        </div>
+        <p id="theory-line" class="theory-line">For n = 1, the predicted standard deviation is 8.00 minutes.</p>
+        <p class="math-caveat"><strong>Central Limit Theorem:</strong> For independent, identically distributed observations with finite variance, the distribution of the sample mean approaches a normal distribution as n increases. This does not mean the original population becomes normal.</p>
+      </div>
+    </section>
+
+    <footer class="footer"><span>The Sampling Lab · Introductory Statistics</span><span>All calculations run locally in your browser. No data is collected.</span></footer>
+  </main>
+</body>
+</html>
