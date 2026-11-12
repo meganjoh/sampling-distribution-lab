@@ -220,6 +220,7 @@ function updateComparisons() {
     $(`compare-mean-${n}`).textContent=fmt(stats.mean);
     $(`compare-sd-${n}`).textContent=fmt(stats.sd);
     $(`compare-plot-${n}`).parentElement.classList.toggle('has-samples',stats.count>0);
+    $(`compare-plot-${n}`).parentElement.classList.toggle('is-selected',n===selectedN);
   }
   const sync=$('compare-sync');
   if (sync) sync.textContent=`Live connection: ${explored.length} of 3 sample sizes explored`;
@@ -252,6 +253,8 @@ function selectN(n) {
     button.setAttribute('aria-pressed',String(active));
   });
   updateSampling();
+  updateComparisons();
+  $('inspector-panel').open=false;
 }
 
 function addSamples(n,k,inspect=false) {
@@ -266,6 +269,7 @@ function addSamples(n,k,inspect=false) {
 
 function generate(k) {
   addSamples(selectedN,k,k===1);
+  $('inspector-panel').open=(k===1);
   refresh();
   $('sample-status').textContent=`Generated ${compactCount(k)} sample${k===1?'':'s'} of size ${selectedN}. There are now ${compactCount(state[selectedN].means.length)} sample means. Find the Pattern has updated too.`;
 }
@@ -284,6 +288,7 @@ function completeComparison() {
 
 function reset(n) {
   state[n]={means:[],inspectedSample:null};
+  $('inspector-panel').open=false;
   refresh();
   $('sample-status').textContent=`Cleared sampling data for n equals ${n}.`;
 }
@@ -299,6 +304,7 @@ document.querySelectorAll('[name="opening-prediction"]').forEach(input=>
 $('reset-active').addEventListener('click',()=>reset(selectedN));
 $('complete-comparison')?.addEventListener('click',completeComparison);
 $('reset-all').addEventListener('click',()=>{
+  $('inspector-panel').open=false;
   for (const n of SAMPLE_SIZES) state[n]={means:[],inspectedSample:null};
   refresh();
   document.querySelectorAll('[name="opening-prediction"]').forEach(input=>input.checked=false);
