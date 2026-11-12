@@ -6,8 +6,8 @@
   <meta name="theme-color" content="#133d49">
   <meta name="description" content="Explore sampling distributions and the Central Limit Theorem through an interactive simulation.">
   <title>The Sampling Lab | Sampling Distributions & the CLT</title>
-  <link rel="stylesheet" href="styles.css">
-  <script src="script.js" type="module"></script>
+  <link rel="stylesheet" href="styles.css?v=2.1.0">
+  <script src="script.js?v=2.1.0" type="module"></script>
 </head>
 <body>
   <a class="skip-link" href="#controls">Skip to simulation controls</a>
@@ -110,7 +110,17 @@
 
     <section class="panel comparison-panel" aria-labelledby="compare-title">
       <div class="section-heading"><div><span class="step-tag">03 · FIND THE PATTERN</span><h2 id="compare-title">Compare your experiments</h2><p class="panel-description">Every plot uses the same horizontal and vertical scales, so the shape and spread can be compared fairly.</p></div><button type="button" id="reset-all" class="text-button">↺ Start over</button></div>
-      <p class="scale-explainer">Shared scales: 0–40 minutes horizontally and the same probability-density scale vertically. This makes differences in shape and spread visible even when sample counts differ. The dashed line marks μ = 8.</p>
+      <div class="comparison-sync" role="status" aria-live="polite">
+        <span class="sync-dot" aria-hidden="true"></span>
+        <div>
+          <strong id="compare-sync">Live connection: 0 of 3 sample sizes explored</strong>
+          <p id="compare-guide">Only the sample size you select in Your Experiment gets new sample means. Return to the experiment to run n = 1, 4, and 36.</p>
+        </div>
+      </div>
+      <div class="compare-actions">
+        <p class="scale-explainer">Each graph uses the same horizontal and vertical scales. Data from <strong>Your Experiment</strong> automatically appears here. The dashed line marks μ = 8.</p>
+        <button type="button" id="complete-comparison" class="action-button secondary">Complete comparison: 1,000 per size</button>
+      </div>
       <div class="comparison-grid">
         <article class="comparison-item" aria-labelledby="compare-1-title">
           <div class="compare-top"><h3 id="compare-1-title">n = 1</h3><span id="compare-count-1">No samples yet</span></div>
@@ -150,7 +160,7 @@
     </section>
 
     <p class="teacher-tip">Tip: If you cannot use a device, you can participate by making predictions and discussing the instructor’s projected simulation.</p>
-    <footer class="footer"><span>The Sampling Lab · Introductory Statistics</span><span>All calculations run locally in your browser. No data is collected.</span></footer>
+    <footer class="footer"><span>The Sampling Lab · Introductory Statistics · v2.1</span><span>All calculations run locally in your browser. No data is collected.</span></footer>
   </main>
 </body>
 </html>
