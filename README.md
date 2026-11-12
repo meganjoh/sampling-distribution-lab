@@ -1,74 +1,62 @@
-# The Sampling Lab
+# The Sampling Lab — Version 2
 
-An interactive teaching applet for **sampling distributions and the Central Limit Theorem**, designed for introductory statistics students. It is a static website and works on phones and computers without installing software.
+An interactive, mobile-friendly teaching applet for **sampling distributions and the Central Limit Theorem**. Built as a static HTML/CSS/JavaScript website for introductory statistics students, with no login, server, or programming required for students.
 
-## What students can do
+**Student webpage:** https://meganjoh.github.io/sampling-distribution-lab/
 
-1. See a strongly right-skewed population of individual customer wait times.
-2. Predict what happens to sample means as sample size grows.
-3. Choose a sample size (`n = 1`, `4`, or `36`) and generate 1, 100, or 1,000 random samples.
-4. Watch a histogram of sample means build up.
-5. Compare experiments side by side using the **same horizontal and vertical scales**.
-6. Reveal the formulas for the mean and standard error of the sampling distribution.
+## What's new in Version 2
 
-Results are saved only in the current browser tab (in memory). No student information is collected and no external scripts or services are used.
+- **Opening prediction:** Students choose whether an individual customer wait time or the average of 36 wait times will vary more. The choice is not graded; students revisit it after experimenting.
+- **Draw and inspect one sample:** **Draw 1 sample** displays the individual simulated wait times, a dot plot of those values, the sample mean, and the calculation that produced it. The orange diamond on the sampling-distribution plot marks that inspected mean.
+- **Large batches stay separate:** Generating **+100** or **+1,000** samples adds their means to the distribution without overwriting the example of one sample the student is inspecting.
+- **Build the distribution gradually:** For fewer than 20 sample means, individual means are shown as dots; from 20 onward, a density histogram appears.
+- **Fair comparisons:** The three plots for `n = 1`, `n = 4`, and `n = 36` retain their results as students switch sample sizes. All use the same horizontal range **0–40 minutes** and the same probability-density vertical scale. This lets students compare experiments even if they generate different numbers of samples.
+- **Guided inquiry:** Center, spread, and shape prompts prepare students to articulate what they observe, rather than see the theorem first.
+- **Reveal the mathematics:** The formulas stay hidden until students choose to reveal them. The theory panel includes the expected standard deviations for all three sample sizes.
+- **Reset:** *Clear samples* affects only the active sample size. *Start over* clears the three sampling experiments, opening prediction, and revealed theory.
 
-## Publish with GitHub Pages (no coding required)
+## Update your existing GitHub Pages website (no JavaScript experience required)
 
-If you're reading this in an extracted ZIP, the easiest way to upload all the files:
+1. Download and extract **sampling-distribution-lab-v2.zip**.
+2. Open your existing repository: https://github.com/meganjoh/sampling-distribution-lab
+3. On the **Code** tab, choose **Add file → Upload files**.
+4. Select the **five main files from the extracted folder**: `index.html`, `styles.css`, `script.js`, `math.js`, and `README.md`. **Upload files, not the ZIP.** The first four must appear at the **top level** of the repository (beside `README.md`).
+5. GitHub should indicate that those files already exist and will be replaced. Commit the changes, which updates their content.
+6. Keep GitHub Pages configured for branch `main` and folder `/(root)` (you should not need to change this). Refresh https://meganjoh.github.io/sampling-distribution-lab/ after the new version publishes. A forced refresh (`Ctrl+Shift+R` on Windows) can help if a cached version appears.
 
-1. Open your GitHub repository (`https://github.com/meganjoh/sampling-distribution-lab`).
-2. Select **Add file** → **Upload files** (you may need to open the **Code** tab first).
-3. Upload `index.html`, `styles.css`, `math.js`, `script.js`, and this `README.md` to the **top level** of the repository. If `README.md` already exists, GitHub will replace it with this version when you commit.
-4. Select **Commit changes**.
-5. In the repository, open **Settings → Pages**. Under **Build and deployment**, set Source to **Deploy from a branch**, Branch to **main**, and folder to **/(root)**; then **Save**.
-6. After publication, visit: **https://meganjoh.github.io/sampling-distribution-lab/**
+The optional `sampling-lab-qr.png` is the same QR code destination as before, so **your existing QR code remains valid**. The optional `package.json` and `tests` folder are for technical tests; neither is required for GitHub Pages or classroom use.
 
-No `npm`, build process, server, or GitHub Actions configuration is needed. Upload the optional `sampling-lab-qr.png` for later use in your teaching slides; it does not need to be uploaded for the applet to work.
+## Suggested student activity (about 12–15 minutes)
 
-## Use locally
+1. **Predict:** Choose the opening prediction before generating any data.
+2. **Inspect:** Select `n = 4`, choose **Draw 1 sample**, and examine how four individual wait times produce one sample mean. Draw a second sample. Notice the different mean.
+3. **Simulate:** Select `n = 1`; generate **+1,000**. Do the same for `n = 4` and `n = 36`.
+4. **Compare:** Discuss the three questions about **center**, **spread**, and **shape**. The original right-skewed population has not changed.
+5. **Explain:** Reveal the mathematics and compare empirical standard deviations to 8, 4, and 1.33 minutes. Revisit the opening prediction.
 
-The easiest local test is to serve the directory with a simple local web server (because the JS uses modules):
+For a faster demonstration, project your own simulation on a laptop. Students who have no device can still predict and discuss. For classroom internet failure, have static screenshots in your slides.
 
-```bash
-python -m http.server 8000
-```
+## Statistical model
 
-Then open `http://localhost:8000` in your browser. Alternatively, test the live GitHub Pages address after uploading.
+Each individual wait time is sampled independently from an **exponential distribution** with population mean `μ = 8` minutes and population standard deviation `σ = 8` minutes. It is a teaching model, **not actual coffee-shop data**.
 
-## Instructor notes
+For every sample of `n` independent customer wait times, the applet calculates the arithmetic mean. The sample means are used to build the empirical sampling distribution.
 
-**Teaching model.** The population is exponential with population mean `μ = 8` minutes and population standard deviation `σ = 8` minutes. Every individual observation is independently generated from this distribution using inverse-transform sampling:
+- `E[X̄] = μ = 8` minutes.
+- `SD(X̄) = σ / √n = 8 / √n` minutes.
+- The CLT explains why the distribution of sample means approaches a normal distribution as `n` grows, even though the original population is right-skewed. There is no universal threshold of `n = 30` for approximate normality.
 
-`X = -8 × ln(1 - U)` for `U ~ Uniform(0, 1)`.
+*Graphs:* Horizontal graph range is 0–40 minutes. Rare observations or sample means above 40 are not drawn but are included in all sample-mean calculations and reported statistics. Comparison histograms are normalized by **all** generated sample means, including those beyond the plot range, so they are density estimates on the common scale. Histograms may have clipped peaks when very few sample means have been generated. The applet therefore displays dots for the first 19 means.
 
-For each sample of size `n`, the applet computes its arithmetic mean. Repeating this produces an empirical sampling distribution. Theory gives:
+*Rounding:* Individual wait times and calculated sample means are displayed rounded to 2 decimals. Small rounding discrepancies are possible if students manually recompute from the displayed values.
 
-- `E[X̄] = μ = 8`.
-- `SD(X̄) = σ / √n = 8 / √n`.
+## Files
 
-The simulation shows observed mean and observed sample standard deviation of the generated sample means (the latter requires at least two sample means). These can differ from the theoretical values when few samples have been generated.
+- `index.html` — page structure and teaching prompts.
+- `styles.css` — responsive design for phones and desktop browsers.
+- `math.js` — statistical model and summary functions (dependency-free).
+- `script.js` — student interactions and SVG visualizations.
+- `sampling-lab-qr.png` — classroom QR code pointing to the published GitHub Pages URL.
+- `package.json` and `tests/math.test.mjs` — optional automated statistical checks.
 
-**Interpretation.** The CLT concerns the distribution of standardized sample means, not a transformation of the original population. A finite-variance assumption and independence are important. There is no universal `n = 30` threshold at which all sample means become normal.
-
-**Graphs.** The comparison histograms show estimated probability density and use fixed scales (`0–40` minutes on the x-axis and the same y-axis scale). Very rare sample means above 40 minutes are omitted from the graph but included in reported statistics. The population graph is a theoretical density, not a histogram of observed data.
-
-**Suggested lesson sequence (10–12 minutes):** Ask for predictions → `n = 1` generate 1,000 → `n = 4` generate 1,000 → `n = 36` generate 1,000 → compare the graphs → reveal the mathematics. For showing sampling variability, first generate only a handful of samples before generating 1,000.
-
-## Testing
-
-If Node.js is installed, from the project directory run:
-
-```bash
-node --test tests/*.test.mjs
-```
-
-These tests check theoretical standard errors, simulated means, and histogram normalization.
-
-## Accessibility and reliability
-
-- Buttons can be used with keyboard or touch.
-- Graphics include descriptive text for assistive technologies.
-- Large controls support phone use.
-- No network requests are needed after the site loads.
-- For a classroom internet outage, keep screenshots of the population and sampling distributions in the slide deck as a backup.
+You can run the numerical tests with `npm test` if you have Node.js installed. The app itself needs no installation. It does not collect, store, or transmit student data; predictions and sample means exist only in memory until the tab is refreshed.
