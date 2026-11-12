@@ -22,7 +22,7 @@ function svgEl(tag, attributes = {}, text = null) {
 
 /** Shared horizontal range and fixed density axis for the comparison cards. */
 function svgPlot(container, options = {}) {
-  const { kind = 'sample', values = [], mini = false, n = 1, highlight = null } = options;
+  const { kind = 'sample', values = [], mini = false, n = 1, highlight = null, normalOverlay = false } = options;
   const W = mini ? 360 : 610;
   const H = mini ? 145 : 263;
   const left = mini ? 14 : 35;
@@ -84,6 +84,24 @@ function svgPlot(container, options = {}) {
   } else {
     svg.appendChild(svgEl('text', { x:left+width/2, y:top+height/2,
       fill:'#718590','text-anchor':'middle','font-size':mini?12:15 }, 'No samples yet'));
+  }
+
+  // Optional theoretical normal curve: this is a comparison, not an exact
+  // density for small n. Shown with simulated histograms in the CLT reveal.
+  if (normalOverlay && kind === 'sample' && values.length >= 20) {
+    const standardError = theoreticalStandardError(n);
+    const points = [];
+    for (let step = 0; step <= 160; step++) {
+      const x = PLOT_MAX_X * step / 160;
+      const z = (x - POPULATION_MEAN) / standardError;
+      const density = Math.exp(-0.5 * z * z) / (standardError * Math.sqrt(2 * Math.PI));
+      points.push(`${xPx(x).toFixed(2)},${yPx(Math.min(density, yMax)).toFixed(2)}`);
+    }
+    svg.appendChild(svgEl('polyline', {
+      points: points.join(' '), fill:'none', stroke:'#b04f23',
+      'stroke-width':mini?3:3.6, 'stroke-dasharray':'7 3',
+      'stroke-linejoin':'round', 'stroke-linecap':'round'
+    }));
   }
 
   // Vertical reference line for the population mean.
@@ -242,7 +260,26 @@ function updateComparisons() {
   }
 }
 
-function refresh() { updateSampling(); updateComparisons(); }
+function updateTheoryExamples() {
+  // Read the same arrays used by Section 2. These charts therefore reflect
+  // every sample the student has actually generated.
+  for (const n of SAMPLE_SIZES) {
+    const stats = summarize(state[n].means);
+    const container = $(`theory-plot-${n}`);
+    svgPlot(container, {values:state[n].means, n, mini:true, normalOverlay:true});
+    container.setAttribute('aria-label', stats.count >= 20
+      ? `${stats.count} sample means at n equals ${n}, shown as a histogram with a theoretical normal curve; observed standard deviation ${fmt(stats.sd)} minutes.`
+      : `${stats.count} sample means at n equals ${n}. Generate at least 20 to compare the histogram with a normal curve.`);
+    $(`theory-count-${n}`).textContent = stats.count ? `${compactCount(stats.count)} simulated means` : 'No samples yet';
+    $(`theory-observed-${n}`).textContent = fmt(stats.sd);
+  }
+  const total = SAMPLE_SIZES.filter(n => state[n].means.length >= 20).length;
+  $('theory-chart-note').textContent = total === 3
+    ? 'Compare how closely the blue histograms follow the orange normal curves. The approximation is much better at n = 36 than at n = 1.'
+    : `Generate at least 20 sample means for ${SAMPLE_SIZES.filter(n => state[n].means.length < 20).map(sizeLabel).join(', ')} to see their normal comparison curves. Use about 1,000 per size for stable histograms.`;
+}
+
+function refresh() { updateSampling(); updateComparisons(); updateTheoryExamples(); }
 
 function selectN(n) {
   if (!SAMPLE_SIZES.includes(n)) return;
@@ -312,7 +349,9 @@ $('reset-all').addEventListener('click',()=>{
   revealed=false;
   $('math-reveal').hidden=true;
   $('reveal-button').setAttribute('aria-expanded','false');
-  $('reveal-button').textContent='Reveal the mathematics ↓';
+  $('reveal-button').textContent='Reveal the CLT ↓';
+  document.querySelectorAll('[name="clt-check"]').forEach(input => input.checked=false);
+  $('clt-check-feedback').textContent='Choose an answer to check your understanding.';
   selectN(1);
   $('sample-status').textContent='Cleared all sampling experiments and predictions.';
 });
@@ -320,8 +359,18 @@ $('reveal-button').addEventListener('click',()=>{
   revealed=!revealed;
   $('math-reveal').hidden=!revealed;
   $('reveal-button').setAttribute('aria-expanded',String(revealed));
-  $('reveal-button').textContent=revealed?'Hide the mathematics ↑':'Reveal the mathematics ↓';
+  $('reveal-button').textContent=revealed?'Hide the CLT ↑':'Reveal the CLT ↓';
+  if (revealed) updateTheoryExamples();
 });
+
+document.querySelectorAll('[name="clt-check"]').forEach(input =>
+  input.addEventListener('change', () => {
+    $('clt-check-feedback').textContent = input.value === 'means'
+      ? 'Correct. The distribution of sample means becomes increasingly normal; the individual wait-time population stays right-skewed.'
+      : 'Not quite. The original wait times remain right-skewed. It is the distribution of sample means that approaches a normal shape.';
+    $('clt-check-feedback').dataset.correct = input.value === 'means' ? 'true' : 'false';
+  })
+);
 
 updatePopulation();
 refresh();

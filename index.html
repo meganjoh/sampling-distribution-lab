@@ -6,8 +6,8 @@
   <meta name="theme-color" content="#133d49">
   <meta name="description" content="Explore sampling distributions and the Central Limit Theorem through an interactive simulation.">
   <title>The Sampling Lab | Sampling Distributions & the CLT</title>
-  <link rel="stylesheet" href="styles.css?v=2.2.0">
-  <script src="script.js?v=2.2.0" type="module"></script>
+  <link rel="stylesheet" href="styles.css?v=2.3.0">
+  <script src="script.js?v=2.3.0" type="module"></script>
 </head>
 <body>
   <a class="skip-link" href="#controls">Skip to simulation controls</a>
@@ -171,20 +171,81 @@
     </section>
 
     <section class="discovery-panel" aria-labelledby="reveal-title">
-      <div class="discovery-top"><div><span class="step-tag light-tag">04 · CONNECT THE IDEAS</span><h2 id="reveal-title">What does the mathematics predict?</h2><p>First use your experiments to make a claim about the center and spread. Then reveal the theory. Revisit your opening prediction after the experiments.</p></div><button type="button" id="reveal-button" class="reveal-button" aria-expanded="false" aria-controls="math-reveal">Reveal the mathematics ↓</button></div>
-      <div id="math-reveal" hidden>
-        <div class="math-grid">
-          <div class="math-tile"><span>Center of sample means</span><div class="formula">E(X̄) = μ = 8</div><p>Averages are centered at the population mean.</p></div>
-          <div class="math-tile"><span>Standard deviation of sample means</span><div class="formula">SD(X̄) = σ / √n</div><p>For this population: 8 / √n minutes.</p></div>
+      <div class="discovery-top">
+        <div>
+          <span class="step-tag light-tag">04 · CONNECT THE IDEAS</span>
+          <h2 id="reveal-title">Why do sample means become bell-shaped?</h2>
+          <p>Look at the shapes you generated. Then reveal the Central Limit Theorem and compare its prediction with your own results.</p>
         </div>
-        <p id="theory-line" class="theory-line">For n = 1, the predicted standard deviation is 8.00 minutes.</p>
-        <p class="theory-comparison">Across our three sample sizes: <strong>n = 1 → SD = 8.00</strong>; <strong>n = 4 → SD = 4.00</strong>; <strong>n = 36 → SD ≈ 1.33</strong> minutes.</p>
-        <p class="math-caveat"><strong>Central Limit Theorem:</strong> For independent, identically distributed observations with finite variance, the distribution of the sample mean approaches a normal distribution as n increases. This does not mean the original population becomes normal.</p>
+        <button type="button" id="reveal-button" class="reveal-button" aria-expanded="false" aria-controls="math-reveal">Reveal the CLT ↓</button>
+      </div>
+      <div id="math-reveal" hidden>
+        <div class="clt-feature" aria-labelledby="clt-statement-title">
+          <span class="clt-label">THE CENTRAL LIMIT THEOREM</span>
+          <h3 id="clt-statement-title">Averages become approximately normally distributed—even when individual values are not.</h3>
+          <p>Suppose we repeatedly draw independent observations from the <strong>same population</strong> with a finite mean and variance. As the sample size <strong>n</strong> grows, the distribution of the sample mean becomes increasingly well approximated by a <strong>normal distribution</strong>.</p>
+          <p class="clt-emphasis">The population stays right-skewed. It is the <em>distribution of sample means</em> that changes shape.</p>
+        </div>
+
+        <div class="math-grid">
+          <div class="math-tile">
+            <span>Where are the means centered?</span>
+            <div class="formula">E(X̄) = μ = 8</div>
+            <p>The average of many sample means is close to the population mean.</p>
+          </div>
+          <div class="math-tile">
+            <span>How variable are the means?</span>
+            <div class="formula">SD(X̄) = σ / √n</div>
+            <p>Here, the standard deviation of sample means is 8 / √n minutes.</p>
+          </div>
+        </div>
+        <p id="theory-line" class="theory-line">For n = 1, the theoretical SD of the sample mean is 8.00 minutes.</p>
+        <p class="math-caveat">The two formulas above are <strong>exact</strong> for independent observations with the stated population mean and SD. The normal shape is an <strong>approximation</strong> that generally improves as n grows.</p>
+
+        <div class="clt-evidence" aria-labelledby="clt-evidence-title">
+          <div class="clt-evidence-heading">
+            <h3 id="clt-evidence-title">See the theorem in your experiments</h3>
+            <p>The bars show <strong>your simulated sample means</strong>. The orange line is a normal curve using the theoretical center and standard deviation—not a curve fitted to the simulated data.</p>
+          </div>
+          <div class="clt-legend"><span class="clt-legend-bar" aria-hidden="true"></span> Your sample means <span class="clt-legend-line" aria-hidden="true"></span> Theoretical normal comparison</div>
+          <div class="clt-evidence-grid">
+            <article class="clt-evidence-card" aria-labelledby="theory-plot-title-1">
+              <h4 id="theory-plot-title-1">n = 1 <span>Original skew remains</span></h4>
+              <div id="theory-plot-1" class="mini-plot" role="img" aria-label="Simulated sample mean distribution for n equals 1 compared with a normal curve"></div>
+              <p id="theory-count-1" class="clt-sample-count">No samples yet</p>
+              <p>Observed SD: <strong id="theory-observed-1">—</strong> <span class="clt-theory-sd">Expected: 8.00</span></p>
+            </article>
+            <article class="clt-evidence-card" aria-labelledby="theory-plot-title-4">
+              <h4 id="theory-plot-title-4">n = 4 <span>Less skewed</span></h4>
+              <div id="theory-plot-4" class="mini-plot" role="img" aria-label="Simulated sample mean distribution for n equals 4 compared with a normal curve"></div>
+              <p id="theory-count-4" class="clt-sample-count">No samples yet</p>
+              <p>Observed SD: <strong id="theory-observed-4">—</strong> <span class="clt-theory-sd">Expected: 4.00</span></p>
+            </article>
+            <article class="clt-evidence-card" aria-labelledby="theory-plot-title-36">
+              <h4 id="theory-plot-title-36">n = 36 <span>Nearly bell-shaped</span></h4>
+              <div id="theory-plot-36" class="mini-plot" role="img" aria-label="Simulated sample mean distribution for n equals 36 compared with a normal curve"></div>
+              <p id="theory-count-36" class="clt-sample-count">No samples yet</p>
+              <p>Observed SD: <strong id="theory-observed-36">—</strong> <span class="clt-theory-sd">Expected: 1.33</span></p>
+            </article>
+          </div>
+          <p class="clt-chart-note" id="theory-chart-note">Generate at least 20 sample means per size to see each histogram with its normal comparison curve. For a stable shape, use about 1,000 per size.</p>
+        </div>
+
+        <div class="clt-check" aria-labelledby="clt-check-title">
+          <h3 id="clt-check-title">Quick check: What does the theorem actually say?</h3>
+          <fieldset class="clt-check-choices" aria-describedby="clt-check-feedback">
+            <legend>As n grows, which distribution becomes approximately normal?</legend>
+            <label><input type="radio" name="clt-check" value="population"> Individual customer wait times</label>
+            <label><input type="radio" name="clt-check" value="means"> Sample means across repeated samples</label>
+          </fieldset>
+          <p id="clt-check-feedback" class="clt-check-feedback" aria-live="polite">Choose an answer to check your understanding.</p>
+        </div>
+        <p class="clt-final-note"><strong>Important:</strong> There is no universal sample size at which the CLT suddenly starts working. How large n needs to be depends on the population's shape and tails. Our original wait-time population is still skewed at every n.</p>
       </div>
     </section>
 
     <p class="teacher-tip">Tip: If you cannot use a device, you can participate by making predictions and discussing the instructor’s projected simulation.</p>
-    <footer class="footer"><span>The Sampling Lab · Introductory Statistics · v2.2</span><span>All calculations run locally in your browser. No data is collected.</span></footer>
+    <footer class="footer"><span>The Sampling Lab · Introductory Statistics · v2.3</span><span>All calculations run locally in your browser. No data is collected.</span></footer>
   </main>
 </body>
 </html>
